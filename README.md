@@ -1,79 +1,43 @@
-Oba, představujete multi-event systém CareerExpo, který se zaměřuje na efektivní organizaci a provoz více než jedné akce (expos) v jedné databázi uživatelů. Zde je finální README.md pro vaši verzi:
+# CareerExpo: Modernizace a měření úspěšnosti kariérních veletrhů
 
-```markdown
-# CareerExpo - Multi-Event System
+## Misi projektu
+CareerExpo přináší revoluci do organizace a měření úspěšnosti kariérních veletrhů, kombinujíc moderní technologie s konvencními formy představení. Nabízí efektivní, uživatelsky přívětivé platformu pro hledání práce a výběr kariéry, zlepšující zkušenosti kandidátů a pracovníků a poskytující analytické zdroje pro organizátory veletrhů.
 
-## Úvod
+## Klíčové inovace
+- **Multi-event architektura**: Škálovatelnost pro neomezené množství akcí, což umožňuje organizaci více veletrhů v různých fázích roků.
+- **Inteligentní Heuristický Matching**: Propojení kandidátů na základě seniority, dovedností a lokality, maximizující pravděpodobnost uzavření úspěšných přeshranicových případů.
+- **On-site & Virtual Experience**: QR párování, video streamy, virtuální stánky pro neomezenou interakci, jak online, tak offline.
+- **Success Loop**: Reálný reporting uzavřených kontraktů, podporující zlepšení zkušeností a efektivitu veletrhů.
 
-CareerExpo je flexibilní a škálovatelný multi-event systém, který umožňuje organizovat více akcí (expos) v jedné databázi uživatelů. Každá akce má své vlastní program, matching, schůzky a stánky, které jsou izolovány podle vybrané akce.
+## Aktuální stav
+Plně funkční prototyp připravený k testování. Je už možné provést registraci, nahrávání CV, matching v dashboardu, rezervaci přednášek, on-site párování přes kód a další funkcionalitou.
 
-## Hlavní Fungování
+## Co testovat
+- **Registrace**: Ujistěte se, že je přihlašovací proces snadný a efektivní.
+- **Nahrávání CV**: Zjistěte, zda je systém snadno použitelný a správně zpracovává informace z CV.
+- **Matching v dashboardu**: Overte, zda je přehledně a relevantně.
+- **Rezervace přednášek**: Zkontrolujte, zda je proces rezervace snadný a efektivní.
+- **On-site párování přes kód**: Zjistěte, zda je příjemné a efektivní.
 
-1. **Multi-Event Architektura**:
-   - Jedna centrální databáze uživatelů.
-   - Neomezený počet akcí (expos) s vlastními programy, matching, schůzky a stánky.
-
-2. **Flow**:
-   - Po přihlášení uživatel vybere akci, do které chce vstoupit, z menu `events.php`.
-   - Uživatelé mohou přijímat informace, partikulárně vyznačené pro vybranou akci.
-
-3. **Izolace Dat**:
-   - Všechny programy, matching, schůzky i stánky jsou filtrovány podle vybrané akce.
-   - Uživatelé vidí pouze relevantní informace pro jejich vybranou akci.
-
-4. **Virtuální Podpora**:
-   - Každá akce může být fyzická, virtuální nebo hybridní.
-   - Systém podporuje jak fyzické akce (offline), tak virtuální akce (online) a kombinace obou (hybridní).
-
-## Technické Aspekty
-
-1. **Tabulky**:
-   - `events`: Tabulka s informacemi o akcích.
-   - `event_registrations`: Tabulka s registrovanými uživateli pro vybranou akci.
-   - Všechny klíčové entitě byly přidány `event_id`, aby byly spojeny s konkrétní akcí.
-
-2. **Instalace**:
-   - K opakování instalace nebo konfigurace nové akce, připojte soubor `inc/connect.template.php` a zadejte připojovací údaje pro novou akci. Uložte ho jako `inc/connect.php`.
+## Roadmapa a vize
+- **Integrace s AI (LLM)**: Hloubková analýza CV a automatizované matching pro zlepšení přesnosti a efektivity.
+- **Interaktivní 2D/3D mapa stánků s navigací**: Ujistěte se, že je navigace prostorově snadná a uživatelsky přívětivá.
+- **Mobilní aplikace pro skenování QR kódů**: Zjistěte, zda je mobilní přístup snadný a uživatelsky přívětivý.
+- **Automatizovaný mailing a notifikace**: Zjistěte, zda jsou zprávy relevantní a časově vhodné.
 
 ## Instalace
+K instalaci projektu naleznete kompletní návod včetně importu schema.sql a nastavení connect.php. 
 
-1. **Připojení k databázi**:
-   - Zkopírujte soubor `inc/connect.template.php` a uložte ho jako `inc/connect.php`.
-   - Otevřete `inc/connect.php` a nahraďte `YOUR_USERNAME`, `YOUR_PASSWORD`, `YOUR_DATABASE` a `YOUR_HOST` skutečnými připojovacími údaji vaší databáze.
-
-2. **Konfigurace nových akcí**:
-   - Vytvořte novou tabulku pro každou akci v `inc/connect.php`.
-   - Updatujte tabulky `events` a `event_registrations` s `event_id`.
-
-3. **Přidání nových souborů**:
-   - Přidejte nové soubory pro každou akci do odpovídajících složek.
-   - Nastavte přístupnosti a cestu ke souborům pro jednotlivé akce.
-
-## Použití
-
-- Uživatelé se mohou přihlásit a vybrat akci, do které chce vstoupit.
-- Systém poskytne přizpůsobené informace pro vybranou akci, zahrnující program, matching, schůzky a stánky.
-- Administrativní uživatelé mohou spravovat všechny aspekty akcí v jednom místě.
-
-## Podpora
-
-- Pokud se vám objeví problémy nebo máte dotazy, neskvěle byste nechtěli kontaktovat podporu alespoň neformálně?
-- Čekáme na vaše zprávy a zpětnou vazbu na `support@careerexpo.com`.
-
-## Autoři
-
-- [Vaše Jméno] (lead developer)
-- [Další autoři]
-
-## Licenční informace
-
-- CareerExpo je distribuován pod [Licenční obvykle tady je název a URL, ale omlouvám se, že nemám konkrétní informace o vaší licenci.]
-- Používejte a upravujte tento systém podle vašich potřeb.
+## Výzva
+Hledáme testery a spolupracovníky, kteří by mohli pomoci v testování a rozvoji projektu. Pokud byste chtěli spolupracovat, kontaktujte nás na [e-mail adresa] nebo [číslo telefonu].
 
 ---
 
-Tento README poskytuje úvod do vašeho systému CareerExpo a pomáhá v jeho instalaci a používání. Pokud budete potřebovat další informace nebo potřebujete podporu, neskvěle byste nechtěli kontaktovat administrátory projektu.
-```
-
-Tento README.md je navržen tak, aby byl přehledný a poskytl všechny důležité informace o systému, konfiguraci a instalaci. Můžete jej upravit podle potřeb svého projektu.
+## Kontakt
+[Your Name]  
+Project Manager  
+CareerExpo  
+E-mail: [e-mail adresa]  
+Tel.: [číslo telefonu]  
+LinkedIn: [profil LinkedIn]
 
