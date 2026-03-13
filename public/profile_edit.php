@@ -126,9 +126,9 @@ include_once __DIR__ . '/../templates/header.php';
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Preferovaná spolupráce</label>
                         <select name="preferred_collaboration" class="form-select">
-                            <option value="onsite" <?= $profile['preferred_collaboration'] == 'full-time' ? 'selected' : '' ?>>On-site</option>
-                            <option value="hybrid" <?= $profile['preferred_collaboration'] == 'part-time' ? 'selected' : '' ?>>Hybrid</option>
-                            <option value="remote" <?= $profile['preferred_collaboration'] == 'contract' ? 'selected' : '' ?>>Remote</option>
+                            <option value="onsite" <?= $profile['preferred_collaboration'] == 'onsite' ? 'selected' : '' ?>>On-site</option>
+                            <option value="hybrid" <?= $profile['preferred_collaboration'] == 'hybrid' ? 'selected' : '' ?>>Hybrid</option>
+                            <option value="remote" <?= $profile['preferred_collaboration'] == 'remote' ? 'selected' : '' ?>>Remote</option>
                         </select>
                     </div>
                 </div>

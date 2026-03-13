@@ -29,21 +29,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'Uživatel s tímto e-mailem již existuje.';
         } else {
             // Create user
-            \$hash = password_hash(\$password, PASSWORD_DEFAULT);
-            \$pdo->beginTransaction();
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            $pdo->beginTransaction();
             try {
-                \$stmt = \$pdo->prepare(\"INSERT INTO users (email, password_hash, role) VALUES (?, ?, ?)\");
-                \$stmt->execute([\$email, \$hash, \$role]);
-                \$userId = \$pdo->lastInsertId();
+                $stmt = $pdo->prepare("INSERT INTO users (email, password_hash, role) VALUES (?, ?, ?)");
+                $stmt->execute([$email, $hash, $role]);
+                $userId = $pdo->lastInsertId();
 
                 // Create profile
-                if (\$role === 'candidate') {
-                    \$pairingCode = strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 6));
-                    \$stmt = \$pdo->prepare(\"INSERT INTO candidate_profiles (user_id, pairing_code) VALUES (?, ?)\");
-                    \$stmt->execute([\$userId, \$pairingCode]);
+                if ($role === 'candidate') {
+                    $pairingCode = strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 6));
+                    $stmt = $pdo->prepare("INSERT INTO candidate_profiles (user_id, pairing_code) VALUES (?, ?)");
+                    $stmt->execute([$userId, $pairingCode]);
                 }
 
-                \$pdo->commit();
+                $pdo->commit();
                 $success = 'Registrace proběhla úspěšně. Nyní se můžete přihlásit.';
             } catch (Exception $e) {
                 $pdo->rollBack();

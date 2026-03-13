@@ -36,18 +36,18 @@ include_once __DIR__ . '/../templates/header.php';
             <h5 class="card-title text-primary fw-bold">Můj Profil</h5>
             <hr>
             <p class="mb-1"><strong><?= e($profile['first_name'] . ' ' . $profile['last_name']) ?></strong></p>
-            <p class=\"mb-1\"><strong>Email:</strong> <?= e(\$_SESSION['user_email']) ?></p>
-            <p class=\"mb-1\"><strong>Lokalita:</strong> <?= e(\$profile['location'] ?: '-') ?></p>
-            <p class=\"mb-1\"><strong>Seniorita:</strong> <span class=\"badge bg-secondary\"><?= e(\$profile['seniority'] ?: '-') ?></span></p>
+            <p class="mb-1"><strong>Email:</strong> <?= e($_SESSION['user_email']) ?></p>
+            <p class="mb-1"><strong>Lokalita:</strong> <?= e($profile['location'] ?: '-') ?></p>
+            <p class="mb-1"><strong>Seniorita:</strong> <span class="badge bg-secondary"><?= e($profile['seniority'] ?: '-') ?></span></p>
 
-            <div class=\"mt-4 p-3 bg-light rounded text-center\">
-                <p class=\"small mb-2 fw-bold\">Můj párovací kód:</p>
-                <h3 class=\"text-primary fw-bold mb-3\"><?= e(\$profile['pairing_code']) ?></h3>
-                <img src=\"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?= urlencode(\$profile['pairing_code']) ?>\" alt=\"QR kód\" class=\"img-fluid mb-2\">
-                <p class=\"small text-muted mb-0\">Ukažte tento kód firmě u stánku pro rychlé spojení.</p>
+            <div class="mt-4 p-3 bg-light rounded text-center">
+                <p class="small mb-2 fw-bold">Můj párovací kód:</p>
+                <h3 class="text-primary fw-bold mb-3"><?= e($profile['pairing_code']) ?></h3>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?= urlencode($profile['pairing_code']) ?>" alt="QR kód" class="img-fluid mb-2">
+                <p class="small text-muted mb-0">Ukažte tento kód firmě u stánku pro rychlé spojení.</p>
             </div>
 
-            <div class=\"mt-4\">
+            <div class="mt-4">
                 <strong>Dovednosti:</strong><br>
                 <?php if ($profile['skills']): ?>
                     <?php foreach (explode(',', $profile['skills']) as $skill): ?>
