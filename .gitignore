@@ -1,0 +1,5 @@
+inc/connect.php
+uploads/cv/*
+!uploads/cv/.gitkeep
+*.log
+.DS_Store
