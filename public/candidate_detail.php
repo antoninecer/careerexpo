@@ -1,6 +1,5 @@
 Základní struktura tohoto souboru bude vypadat takto:
 
-```php
 <?php
 require_once('path_to_your_bootstrap_file');
 require_once('path_to_your_MatchingService_file');
@@ -37,7 +36,6 @@ if(isset($_GET['id'])){
     require_once('path_to_your_template_file');
 }
 ?>
-```
 
 Pokud používáte Bootstrap, pak budete potřebovat zobrazit šablony, které odpovídají tomuto kódu. Tyto šablony by měly obsahovat všechny potřebné HTML kód, který bude potřeba pro zobrazení informací o kandidátu.
 

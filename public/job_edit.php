@@ -1,6 +1,5 @@
 Základem pro vytvoření tohoto souboru by mělo být následující. Tento příklad je závislý na několika předpokládaných třídách a funkcích, které nemusí existovat ve vašem projektu.
 
-```php
 <?php
 require_once 'vendor/autoload.php';
 require_once 'models/Job.php';
@@ -61,11 +60,9 @@ function getCsrfInput() {
     return '<input type="hidden" name="csrf_token" value="' . $_SESSION['csrf_token'] . '">';
 }
 ?>
-```
 
 Potom byste měli mít `templates/job_edit.php` soubor, který by mohl vypadat takto:
 
-```php
 <?php include 'templates/header.php'; ?>
 
 <h1>Edit Job</h1>
@@ -81,7 +78,6 @@ Potom byste měli mít `templates/job_edit.php` soubor, který by mohl vypadat t
 </form>
 
 <?php include 'templates/footer.php'; ?>
-```
 
 Tento příklad je závislý na několika předpokládaných třídách a funkcích, které nemusí existovat ve vašem projektu. Například třída `Job`, která by měla mít metody `load`, `validateOwnership` a `save`, a také třída `MatchingService`, která by měla mít metodu `updateAllMatchesForJob`.
 
