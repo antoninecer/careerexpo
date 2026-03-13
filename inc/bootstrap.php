@@ -47,6 +47,21 @@ try {
     die("A database error occurred. Please try again later.");
 }
 
+// Multi-event helper
+function getCurrentEventId() {
+    return $_SESSION['current_event_id'] ?? null;
+}
+
+function requireEvent() {
+    if (isLoggedIn() && !getCurrentEventId()) {
+        // Exclude events selection page itself from redirection
+        if (basename($_SERVER['PHP_SELF']) !== 'events.php' && basename($_SERVER['PHP_SELF']) !== 'logout.php') {
+            header("Location: /events.php");
+            exit;
+        }
+    }
+}
+
 // Global helper functions
 function redirect($path) {
     header("Location: " . $path);
@@ -73,3 +88,4 @@ function requireRole($role) {
         die('Access denied.');
     }
 }
+

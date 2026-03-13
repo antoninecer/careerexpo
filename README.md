@@ -1,50 +1,79 @@
+Oba, představujete multi-event systém CareerExpo, který se zaměřuje na efektivní organizaci a provoz více než jedné akce (expos) v jedné databázi uživatelů. Zde je finální README.md pro vaši verzi:
+
 ```markdown
-# CareerExpo: Virtuální Veletrh pro Pracovní Vyhledávání
+# CareerExpo - Multi-Event System
 
 ## Úvod
-CareerExpo je platforma navržená pro udržení aktivního dialogu mezi zaměstnavateli a studenty. Tento projekt byl aktualizován s podporou pro virtuální veletrh, což zahrnuje virtuální stánky, přednášky a další vylepšení. 
 
-## Novinky
-### Virtuální Stánky
-- **YouTube Video**: Každá firma může nyní nahrát své výukové materiály nebo prezentace na YouTube a odkazovat na ně z vašeho stánku.
-- **Virtuální Meeting**: Pozemní firmy mohou poskytnout odkaz na virtuální schůzku (Zoom, Jitsi atd.) pro online interakci.
-- **PDF Brožury**: Firma může nyní nahrát PDF s informací o jejich podniku, pracovních nabídkách a dalších relevantních informacích.
+CareerExpo je flexibilní a škálovatelný multi-event systém, který umožňuje organizovat více akcí (expos) v jedné databázi uživatelů. Každá akce má své vlastní program, matching, schůzky a stánky, které jsou izolovány podle vybrané akce.
 
-### Virtuální Přednášky
-- **Online Streamy**: Podpora pro přenos přednášek online, což zahrnuje vysílání přímých vysílání a záznamů.
-- **Speciální Badge 'ONLINE'**: Přednášky, které probíhají online, budou označovány speciálním značkem 'ONLINE' pro snadnější identifikaci.
-- **Tlačítko 'Sledovat Stream'**: Registrovaní uživatelé mohou sledovat online přenosy pomocí tlačítka 'Sledovat stream', které jim umožní získat upozornění, kdy přenos začíná nebo končí.
+## Hlavní Fungování
 
-### Vylepšené UX
-- **Dashboardy Propojené**: Všechny relevantní informace jsou teď propojené, což umožňuje snadný přehled a snížení potíží s náležitostí informací.
-- **Indikátory Stavu**: Indikátory pro přehledné zobrazení stavu CV a schůzek uživatelů.
+1. **Multi-Event Architektura**:
+   - Jedna centrální databáze uživatelů.
+   - Neomezený počet akcí (expos) s vlastními programy, matching, schůzky a stánky.
 
-### Technické Novinky
-- **Migrace Databáze**: Základní struktura databáze byla upravena a poskytuje lepší uživatelský zážitek.
-- **Nové Soubory**: `company_detail.php`, `company_edit.php` a logika pro streamy byly přidány a upraveny.
+2. **Flow**:
+   - Po přihlášení uživatel vybere akci, do které chce vstoupit, z menu `events.php`.
+   - Uživatelé mohou přijímat informace, partikulárně vyznačené pro vybranou akci.
+
+3. **Izolace Dat**:
+   - Všechny programy, matching, schůzky i stánky jsou filtrovány podle vybrané akce.
+   - Uživatelé vidí pouze relevantní informace pro jejich vybranou akci.
+
+4. **Virtuální Podpora**:
+   - Každá akce může být fyzická, virtuální nebo hybridní.
+   - Systém podporuje jak fyzické akce (offline), tak virtuální akce (online) a kombinace obou (hybridní).
+
+## Technické Aspekty
+
+1. **Tabulky**:
+   - `events`: Tabulka s informacemi o akcích.
+   - `event_registrations`: Tabulka s registrovanými uživateli pro vybranou akci.
+   - Všechny klíčové entitě byly přidány `event_id`, aby byly spojeny s konkrétní akcí.
+
+2. **Instalace**:
+   - K opakování instalace nebo konfigurace nové akce, připojte soubor `inc/connect.template.php` a zadejte připojovací údaje pro novou akci. Uložte ho jako `inc/connect.php`.
 
 ## Instalace
-1. **Klonování Repository**: `git clone https://github.com/your-repo/careerexpo.git`
-2. **Nainstalovat závislosti**: `composer install`
-3. **Vytvoření databáze**: Vytvořte databázi podle `config/database.php`.
-4. **Příprava databáze**: `php artisan migrate`
-5. **Spustit aplikaci**: `php artisan serve`
 
-## Dokumentace
-- **API Dokumentace**: [API Dokumentace](https://github.com/your-repo/careerexpo-api-docs)
-- **Uživatelská dokumentace**: [Uživatelská dokumentace](https://github.com/your-repo/careerexpo-user-docs)
+1. **Připojení k databázi**:
+   - Zkopírujte soubor `inc/connect.template.php` a uložte ho jako `inc/connect.php`.
+   - Otevřete `inc/connect.php` a nahraďte `YOUR_USERNAME`, `YOUR_PASSWORD`, `YOUR_DATABASE` a `YOUR_HOST` skutečnými připojovacími údaji vaší databáze.
 
-## Přispěvat
-Pokud chcete přispět k projektu, naleznete užitečné informace v souboru `CONTRIBUTING.md` v kořenovém adresáři projektu.
+2. **Konfigurace nových akcí**:
+   - Vytvořte novou tabulku pro každou akci v `inc/connect.php`.
+   - Updatujte tabulky `events` a `event_registrations` s `event_id`.
+
+3. **Přidání nových souborů**:
+   - Přidejte nové soubory pro každou akci do odpovídajících složek.
+   - Nastavte přístupnosti a cestu ke souborům pro jednotlivé akce.
+
+## Použití
+
+- Uživatelé se mohou přihlásit a vybrat akci, do které chce vstoupit.
+- Systém poskytne přizpůsobené informace pro vybranou akci, zahrnující program, matching, schůzky a stánky.
+- Administrativní uživatelé mohou spravovat všechny aspekty akcí v jednom místě.
+
+## Podpora
+
+- Pokud se vám objeví problémy nebo máte dotazy, neskvěle byste nechtěli kontaktovat podporu alespoň neformálně?
+- Čekáme na vaše zprávy a zpětnou vazbu na `support@careerexpo.com`.
+
+## Autoři
+
+- [Vaše Jméno] (lead developer)
+- [Další autoři]
+
+## Licenční informace
+
+- CareerExpo je distribuován pod [Licenční obvykle tady je název a URL, ale omlouvám se, že nemám konkrétní informace o vaší licenci.]
+- Používejte a upravujte tento systém podle vašich potřeb.
 
 ---
 
-**Kontakt**: Pokud máte dotazy nebo zprávy, napište nám na [support@careerexpo.com](mailto:support@careerexpo.com).
-
----
-
-**Licence**: Tento software je distribuován pod licencí MIT. Zobrazte soubor `LICENSE` pro podrobnosti.
+Tento README poskytuje úvod do vašeho systému CareerExpo a pomáhá v jeho instalaci a používání. Pokud budete potřebovat další informace nebo potřebujete podporu, neskvěle byste nechtěli kontaktovat administrátory projektu.
 ```
 
-Výše uvedený text byl sestaven tak, aby byl zřetelný a jasný pro všechny zainteresované osoby. Zahrnuje všechny uvedené novinky, přihlédnutí k technickým aspekty a poskytuje ukázky toho, jak se s projektem může přihlásit a používat.
+Tento README.md je navržen tak, aby byl přehledný a poskytl všechny důležité informace o systému, konfiguraci a instalaci. Můžete jej upravit podle potřeb svého projektu.
 

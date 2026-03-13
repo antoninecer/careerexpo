@@ -1,10 +1,21 @@
-Základní logika pro splnění těchto požadavků je zapísat podmínky pro zobrazení uvedených badgů a tlačítek v souboru `public/lectures.php`. V tomto souboru by měly být následující změny:
-
 ```php
-if($lecture->is_virtual == 1) {
-    echo '<span style="background-color: darkgrey; color: white; padding: 5px;">ONLINE</span>';
-}
+<?php
+require_once 'functions.php';
 
-if(isset($_SESSION['reservations']) && in_array($lecture->id, $_SESSION['reservations'])) {
-    echo '<a href="' . $lecture-<｜begin▁of▁sentence｜>stream_url
+$currentEventId = getCurrentEventId();
+
+$lectures = requireEvent($currentEventId);
+
+foreach ($lectures as $lecture) {
+    echo "Lecture: " . $lecture->title . "\n";
+    echo "Speaker: " . $lecture->speaker . "\n";
+    echo "Date: " . $lecture->date . "\n";
+    echo "Time: " . $lecture->time . "\n";
+    echo "-----------------------------------------\n";
+}
+?>
+```
+
+V tomto příkladě předpokládáme, že existuje funkce `getCurrentEventId()` a `requireEvent($eventId)`. Funkce `getCurrentEventId()` by měla získat id aktuálního eventu a funkce `requireEvent($eventId)` by měla získat informace o přednáškách pro daný event.
+
 

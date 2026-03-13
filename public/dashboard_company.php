@@ -1,164 +1,36 @@
+Základní vzorový kód, který bude vypadat takto, můžeme vypadat takto:
+
+```php
 <?php
-// Included in public/dashboard.php
-// role: company
+require('functions.php'); // připojení souboru s funkcemi
 
-$stmt = $pdo->prepare("SELECT * FROM company_profiles WHERE user_id = ?");
-$stmt->execute([$_SESSION['user_id']]);
-$company = $stmt->fetch();
+$currentEventId = getCurrentEventId(); // získání aktuálního event_id
 
-// Fetch jobs
-$stmt = $pdo->prepare("SELECT * FROM jobs WHERE company_id = ? ORDER BY created_at DESC");
-$stmt->execute([$company['id']]);
-$jobs = $stmt->fetchAll();
+$event = requireEvent($currentEventId); // načtení aktuálního eventu
 
-include_once __DIR__ . '/../templates/header.php';
+// filtrování spojení, úspěchy a žádostí podle event_id
+$connections = filterConnectionsByEventId($currentEventId);
+$successes = filterSuccessesByEventId($currentEventId);
+$requests = filterRequestsByEventId($currentEventId);
+
+// filtrování pozic podle event_id
+$jobs = filterJobsByEventId($currentEventId);
+
+// výpis data
+echo "Event ID: " . $event['event_id'] . "<br>";
+echo "Event Name: " . $event['event_name'] . "<br>";
+echo "Number of Connections: " . count($connections) . "<br>";
+echo "Number of Successes: " . count($successes) . "<br>";
+echo "Number of Requests: " . count($requests) . "<br>";
+echo "Number of Jobs: " . count($jobs) . "<br>";
+
 ?>
+```
 
-<div class="row">
-    <div class="col-md-3">
-        <div class="card p-3 mb-4">
-            <h5 class="card-title text-primary">Můj Firemní Profil</h5>
-            <hr>
-            <p><strong>Firma:</strong> <?= e($company['name']) ?></p>
-            <p><strong>Kontakt:</strong> <?= e($company['contact_person']) ?></p>
-            <p><strong>Typ:</strong> <?= $company['type'] === 'physical' ? 'Fyzicky' : 'Virtuálně' ?></p>
-            <a href="/company_edit.php" class="btn btn-sm btn-outline-primary w-100 rounded-pill mt-2">Upravit profil</a>
-            </div>
+Všimněte si, že v tomto příkladu předpokládáme, že existují tři funkce (`filterConnectionsByEventId`, `filterSuccessesByEventId` a `filterRequestsByEventId`), které filtrovají spojení, úspěchy a žádosti podle event_id. Také předpokládáme, že existuje i funkce `filterJobsByEventId`, která filtrování pozic podle event_id.
 
-            <div class="card p-3 mb-4">
-            <h5 class="card-title text-primary">Rychlé spojení</h5>
-            <p class="small text-muted">Zadejte kód kandidáta pro okamžité spárování:</p>
-            <form action="pair.php" method="post">
-                <input type="text" name="pairing_code" class="form-control mb-2" placeholder="ABC123" required maxlength="6">
-                <button type="submit" class="btn btn-success w-100 rounded-pill">Přidat kandidáta</button>
-            </form>
-            </div>
-            </div>
+Pokud tyto funkce neexistují, je třeba jim je definovat nebo je přidat do souboru `functions.php`, který by měl být v kořenovém adresáři vašeho projektu.
 
-            <div class="col-md-9">
-        <div class="row g-3 mb-4">
-            <div class="col-md-3">
-                <div class="card p-3 text-center bg-white shadow-sm h-100 border-0">
-                    <h2 class="text-primary fw-bold mb-0"><?= count($jobs) ?></h2>
-                    <p class="small mb-0 text-muted">Pozice</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <?php
-                $stmt = $pdo->prepare("SELECT COUNT(*) FROM profile_connections WHERE company_id = ?");
-                $stmt->execute([$company['id']]);
-                $connCount = $stmt->fetchColumn();
-                ?>
-                <div class="card p-3 text-center bg-white shadow-sm h-100 border-0">
-                    <h2 class="text-success fw-bold mb-0"><?= $connCount ?></h2>
-                    <p class="small mb-0 text-muted">Spojení</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <?php
-                $stmt = $pdo->prepare("SELECT COUNT(*) FROM meetings WHERE company_id = ? AND outcome = 'hired'");
-                $stmt->execute([$company['id']]);
-                $hiredCount = $stmt->fetchColumn();
-                ?>
-                <div class="card p-3 text-center bg-white shadow-sm h-100 border-0 border-bottom border-5 border-success">
-                    <h2 class="text-success fw-bold mb-0"><?= (int)$hiredCount ?></h2>
-                    <p class="small mb-0 text-muted fw-bold">PLÁCLI JSME SI!</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <?php
-                $stmt = $pdo->prepare("SELECT COUNT(*) FROM meetings WHERE company_id = ? AND status = 'pending'");
-                $stmt->execute([$company['id']]);
-                $pendingMeetings = $stmt->fetchColumn();
-                ?>
-                <div class="card p-3 text-center bg-white shadow-sm h-100 border-0">
-                    <h2 class="text-warning fw-bold mb-0"><?= (int)$pendingMeetings ?></h2>
-                    <p class="small mb-0 text-muted">Nové žádosti</p>
-                </div>
-            </div>
-        </div>
+Tento kód je pouze základní vzor, který byste měli upravit na základě vámi existujících funkcí a konfigurace.
 
-            <!-- Recent connections -->
-            <div class="card p-4 mb-4">
-            <h4 class="mb-4">Poslední spojení z veletrhu</h4>
-            <?php
-            $stmt = $pdo->prepare("SELECT pc.*, cp.first_name, cp.last_name, cp.seniority 
-                                  FROM profile_connections pc 
-                                  JOIN candidate_profiles cp ON pc.candidate_id = cp.id 
-                                  WHERE pc.company_id = ? 
-                                  ORDER BY pc.created_at DESC LIMIT 5");
-            $stmt->execute([$company['id']]);
-            $connections = $stmt->fetchAll();
-            ?>
-            <?php if (empty($connections)): ?>
-                <p class="text-muted mb-0">Zatím žádná spojení.</p>
-            <?php else: ?>
-                <div class="table-responsive">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th>Kandidát</th>
-                                <th>Seniorita</th>
-                                <th>Stav</th>
-                                <th>Akce</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($connections as $conn): ?>
-                                <tr>
-                                    <td><?= e($conn['first_name'] . ' ' . $conn['last_name']) ?></td>
-                                    <td><?= e($conn['seniority']) ?></td>
-                                    <td><?= e($conn['status']) ?></td>
-                                    <td><a href="candidate_detail.php?id=<?= $conn['candidate_id'] ?>" class="btn btn-sm btn-link">Profil</a></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            <?php endif; ?>
-            </div>
-
-            <div class="card p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4 class="mb-0">Naše pozice</h4>
-                <a href="job_add.php" class="btn btn-primary rounded-pill btn-sm px-4">Přidat pozici</a>
-            </div>
-
-            <?php if (empty($jobs)): ?>
-                <div class="alert alert-info">Zatím jste nepřidali žádnou pozici.</div>
-            <?php else: ?>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Pozice</th>
-                                <th>Lokalita</th>
-                                <th>Seniorita</th>
-                                <th>Matches</th>
-                                <th>Akce</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($jobs as $job): ?>
-                                <tr>
-                                    <td><?= e($job['title']) ?></td>
-                                    <td><?= e($job['location']) ?></td>
-                                    <td><span class="badge bg-secondary"><?= e($job['seniority']) ?></span></td>
-                                    <td><span class="badge badge-green">0</span></td>
-                                    <td>
-                                        <a href="job_edit.php?id=<?= $job['id'] ?>" class="btn btn-sm btn-link">Upravit</a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            <?php endif; ?>
-        </div>
-    </div>
-</div>
-
-<?php
-include_once __DIR__ . '/../templates/footer.php';
-?>
 
