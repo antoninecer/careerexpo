@@ -22,7 +22,7 @@ include_once __DIR__ . '/../templates/header.php';
             <p><strong>Firma:</strong> <?= e($company['name']) ?></p>
             <p><strong>Kontakt:</strong> <?= e($company['contact_person']) ?></p>
             <p><strong>Typ:</strong> <?= $company['type'] === 'physical' ? 'Fyzicky' : 'Virtuálně' ?></p>
-            <a href="company_edit.php" class="btn btn-sm btn-outline-primary w-100 rounded-pill mt-2">Upravit profil</a>
+            <a href="/company_edit.php" class="btn btn-sm btn-outline-primary w-100 rounded-pill mt-2">Upravit profil</a>
             </div>
 
             <div class="card p-3 mb-4">

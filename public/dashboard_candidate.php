@@ -40,6 +40,22 @@ include_once __DIR__ . '/../templates/header.php';
             <p class="mb-1 small"><strong>Lokalita:</strong> <?= e($profile['location'] ?: '-') ?></p>
             <p class="mb-1 small"><strong>Seniorita:</strong> <span class="badge bg-secondary"><?= e($profile['seniority'] ?: '-') ?></span></p>
             
+            <div class="mt-3">
+                <?php
+                $stmt = $pdo->prepare("SELECT id FROM candidate_files WHERE candidate_id = ?");
+                $stmt->execute([$profile['id']]);
+                $hasCv = $stmt->fetch();
+                ?>
+                <p class="mb-0 small">
+                    <strong>CV:</strong> 
+                    <?php if ($hasCv): ?>
+                        <span class="text-success fw-bold"><i class="bi bi-check-circle-fill"></i> nahráno</span>
+                    <?php else: ?>
+                        <span class="text-danger fw-bold"><i class="bi bi-x-circle-fill"></i> chybí</span>
+                    <?php endif; ?>
+                </p>
+            </div>
+
             <div class="mt-4 p-3 bg-light rounded text-center">
                 <p class="small mb-2 fw-bold">Párovací kód:</p>
                 <h3 class="text-primary fw-bold mb-3"><?= e($profile['pairing_code']) ?></h3>
@@ -107,7 +123,7 @@ include_once __DIR__ . '/../templates/header.php';
                                     <span class="badge badge-<?= $job['match_color'] ?> rounded-pill px-3 py-2">Shoda <?= $job['match_score'] ?>%</span>
                                 </div>
                                 <div class="mt-3 text-end">
-                                    <a href="job_detail.php?id=<?= $job['id'] ?>" class="btn btn-sm btn-outline-primary rounded-pill">Detail</a>
+                                    <a href="/company_detail.php?id=<?= $job['company_id'] ?>" class="btn btn-sm btn-outline-primary rounded-pill">Detail firmy</a>
                                     <a href="meeting_request.php?job_id=<?= $job['id'] ?>" class="btn btn-sm btn-success rounded-pill ms-2">Schůzka</a>
                                 </div>
                             </div>

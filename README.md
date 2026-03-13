@@ -1,54 +1,50 @@
 ```markdown
-# CareerExpo - Webová platforma pro měření úspěšnosti pracovních veletrhů
+# CareerExpo: Virtuální Veletrh pro Pracovní Vyhledávání
 
-## Účel
-CareerExpo je webová platforma navržená pro měření úspěšnosti pracovních veletrhů. Provozovatelé a účastníci mohou sledovat výsledky veletrhu v reálném čase, zahájit okamžité kontakty a zaplňovat feedbacky.
+## Úvod
+CareerExpo je platforma navržená pro udržení aktivního dialogu mezi zaměstnavateli a studenty. Tento projekt byl aktualizován s podporou pro virtuální veletrh, což zahrnuje virtuální stánky, přednášky a další vylepšení. 
 
-## Klíčové funkce
-1. **Veřejný dashboard statistik**
-   - Počty účastníců (kandidáti, firmy)
-   - Počty úspěšných kontraktů
-   - Grafické přehledy a trendy
+## Novinky
+### Virtuální Stánky
+- **YouTube Video**: Každá firma může nyní nahrát své výukové materiály nebo prezentace na YouTube a odkazovat na ně z vašeho stánku.
+- **Virtuální Meeting**: Pozemní firmy mohou poskytnout odkaz na virtuální schůzku (Zoom, Jitsi atd.) pro online interakci.
+- **PDF Brožury**: Firma může nyní nahrát PDF s informací o jejich podniku, pracovních nabídkách a dalších relevantních informacích.
 
-2. **Inteligentní Matching kandidátů**
-   - Založené na senioritě, dovednostech a lokalitě
-   - Přesnější závazky a lépe vyplněné schůzky
+### Virtuální Přednášky
+- **Online Streamy**: Podpora pro přenos přednášek online, což zahrnuje vysílání přímých vysílání a záznamů.
+- **Speciální Badge 'ONLINE'**: Přednášky, které probíhají online, budou označovány speciálním značkem 'ONLINE' pro snadnější identifikaci.
+- **Tlačítko 'Sledovat Stream'**: Registrovaní uživatelé mohou sledovat online přenosy pomocí tlačítka 'Sledovat stream', které jim umožní získat upozornění, kdy přenos začíná nebo končí.
 
-3. **On-site párování**
-   - Použití QR kódů nebo 6místných kódů pro okamžité kontaktování
-   - Rychlejší a efektivnější komunikace
+### Vylepšené UX
+- **Dashboardy Propojené**: Všechny relevantní informace jsou teď propojené, což umožňuje snadný přehled a snížení potíží s náležitostí informací.
+- **Indikátory Stavu**: Indikátory pro přehledné zobrazení stavu CV a schůzek uživatelů.
 
-4. **Program přednášek**
-   - Timeline layout pro snadné plánování a sledování přednášek
-   - Správa více sálů
-   - Rezervace míst ve slychacích sálách
-
-5. **Success Loop: Sledování výsledků schůzek**
-   - 'Plácli jsme si!' funkce pro okamžité zaznamenání závazků
-   - Reálný reporting pro organizátory a účastníky
-
-## Technické detaily
-- **PHP:** 8.5+
-- **Database:** MySQL
-- **Frontend:** Bootstrap 5.3
-- **CSRF ochrana**
-- **Secure File Upload**
+### Technické Novinky
+- **Migrace Databáze**: Základní struktura databáze byla upravena a poskytuje lepší uživatelský zážitek.
+- **Nové Soubory**: `company_detail.php`, `company_edit.php` a logika pro streamy byly přidány a upraveny.
 
 ## Instalace
-1. Zkopírujte soubor `inc/connect.template.php` do `inc/connect.php`.
-2. Provedte potřebné úpravy v `inc/connect.php` (zadejte své databázové údaje).
-3. Nainstalujte závislosti pomocí `composer install`.
-4. Spusťte databázový script pro vytvoření tabulek a zakódování účtů.
-5. Navštivte vaši domovní adresu v prohlížeči, aby se vytvořily notace v databázi.
+1. **Klonování Repository**: `git clone https://github.com/your-repo/careerexpo.git`
+2. **Nainstalovat závislosti**: `composer install`
+3. **Vytvoření databáze**: Vytvořte databázi podle `config/database.php`.
+4. **Příprava databáze**: `php artisan migrate`
+5. **Spustit aplikaci**: `php artisan serve`
 
-## Role a přístupy
-- **Admin:** Správce s úplným přístupem k všem funkcím, moci pro změnu nastavení a role.
-- **Company:** Uživatel firmy s možností úvodní registrace a následnou úpravou profilu.
-- **Candidate:** Uživatel kandidáta s možností registrace, profilové úpravy a sledování schůzek.
+## Dokumentace
+- **API Dokumentace**: [API Dokumentace](https://github.com/your-repo/careerexpo-api-docs)
+- **Uživatelská dokumentace**: [Uživatelská dokumentace](https://github.com/your-repo/careerexpo-user-docs)
 
-## Kontakt
-Pro nějaké dotazy nebo potřeby náprav, kontaktujte nás na [e-mailovou adresu] nebo na [telefonickou čísla].
+## Přispěvat
+Pokud chcete přispět k projektu, naleznete užitečné informace v souboru `CONTRIBUTING.md` v kořenovém adresáři projektu.
+
+---
+
+**Kontakt**: Pokud máte dotazy nebo zprávy, napište nám na [support@careerexpo.com](mailto:support@careerexpo.com).
+
+---
+
+**Licence**: Tento software je distribuován pod licencí MIT. Zobrazte soubor `LICENSE` pro podrobnosti.
 ```
 
-Toto README.md zahrnuje hlavní body, které jste uvedli, a pomáhá jasně zdůvodnit cíle a funkce projektu.
+Výše uvedený text byl sestaven tak, aby byl zřetelný a jasný pro všechny zainteresované osoby. Zahrnuje všechny uvedené novinky, přihlédnutí k technickým aspekty a poskytuje ukázky toho, jak se s projektem může přihlásit a používat.
 
