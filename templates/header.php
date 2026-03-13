@@ -35,6 +35,7 @@
                         <?php if (hasRole('candidate')): ?>
                             <li class='nav-item'><a class='nav-link' href='/stands.php'>Mapa stánků</a></li>
                             <li class='nav-item'><a class='nav-link' href='/lectures.php'>Přednášky</a></li>
+                            <li class='nav-item'><a class='nav-link' href='/meetings.php'>Moje schůzky</a></li>
                         <?php endif; ?>
                         <li class='nav-item'><a class='nav-link' href='/logout.php'>Odhlásit</a></li>
                     <?php else: ?>

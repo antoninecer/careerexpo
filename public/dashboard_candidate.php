@@ -17,7 +17,7 @@ $jobs = $stmt->fetchAll();
 $recommendedJobs = [];
 foreach ($jobs as $job) {
     $match = $matcher->calculateMatch($profile['id'], $job['id']);
-    if ($match['score'] >= 40) {
+    if ($match && $match['score'] >= 40) {
         $job['match_score'] = $match['score'];
         $job['match_color'] = $match['color'];
         $recommendedJobs[] = $job;
@@ -32,89 +32,83 @@ include_once __DIR__ . '/../templates/header.php';
 
 <div class="row">
     <div class="col-md-3">
-        <div class="card p-3 mb-4 shadow-sm">
+        <div class="card p-3 mb-4 shadow-sm border-0">
             <h5 class="card-title text-primary fw-bold">Můj Profil</h5>
             <hr>
             <p class="mb-1"><strong><?= e($profile['first_name'] . ' ' . $profile['last_name']) ?></strong></p>
-            <p class="mb-1"><strong>Email:</strong> <?= e($_SESSION['user_email']) ?></p>
-            <p class="mb-1"><strong>Lokalita:</strong> <?= e($profile['location'] ?: '-') ?></p>
-            <p class="mb-1"><strong>Seniorita:</strong> <span class="badge bg-secondary"><?= e($profile['seniority'] ?: '-') ?></span></p>
-
+            <p class="small text-muted mb-3"><?= e($_SESSION['user_email']) ?></p>
+            <p class="mb-1 small"><strong>Lokalita:</strong> <?= e($profile['location'] ?: '-') ?></p>
+            <p class="mb-1 small"><strong>Seniorita:</strong> <span class="badge bg-secondary"><?= e($profile['seniority'] ?: '-') ?></span></p>
+            
             <div class="mt-4 p-3 bg-light rounded text-center">
-                <p class="small mb-2 fw-bold">Můj párovací kód:</p>
+                <p class="small mb-2 fw-bold">Párovací kód:</p>
                 <h3 class="text-primary fw-bold mb-3"><?= e($profile['pairing_code']) ?></h3>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?= urlencode($profile['pairing_code']) ?>" alt="QR kód" class="img-fluid mb-2">
-                <p class="small text-muted mb-0">Ukažte tento kód firmě u stánku pro rychlé spojení.</p>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?= urlencode($profile['pairing_code']) ?>" alt="QR kód" class="img-fluid mb-2 rounded shadow-sm">
+                <p class="small text-muted mb-0">Ukažte tento kód firmě u stánku.</p>
             </div>
 
-            <div class="mt-4">
-                <strong>Dovednosti:</strong><br>
-                <?php if ($profile['skills']): ?>
-                    <?php foreach (explode(',', $profile['skills']) as $skill): ?>
-                        <span class="badge bg-light text-dark border mt-1"><?= e(trim($skill)) ?></span>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <span class="small text-muted">Nevyplněno</span>
-                <?php endif; ?>
-            </div>
-
-            <a href="profile_edit.php" class="btn btn-sm btn-primary w-100 rounded-pill mt-4">Upravit profil / Nahrát CV</a>
+            <a href="profile_edit.php" class="btn btn-sm btn-primary w-100 rounded-pill mt-4">Upravit profil</a>
         </div>
     </div>
 
     <div class="col-md-9">
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card p-3 text-center bg-white shadow-sm h-100 border-0">
-                    <h2 class="text-primary fw-bold"><?= count($recommendedJobs) ?></h2>
-                    <p class="mb-0 text-muted">Doporučené firmy</p>
-                </div>
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <a href="#recommended-jobs" class="text-decoration-none">
+                    <div class="card p-3 text-center bg-white shadow-sm h-100 border-0">
+                        <h2 class="text-primary fw-bold mb-0"><?= count($recommendedJobs) ?></h2>
+                        <p class="small mb-0 text-muted">Doporučené firmy</p>
+                    </div>
+                </a>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card p-3 text-center bg-white shadow-sm h-100 border-0">
-                    <h2 class="text-success fw-bold">0</h2>
-                    <p class="mb-0 text-muted">Potvrzené schůzky</p>
-                </div>
+            <div class="col-md-4">
+                <a href="/meetings.php" class="text-decoration-none">
+                    <div class="card p-3 text-center bg-white shadow-sm h-100 border-0">
+                        <?php
+                        $stmt = $pdo->prepare("SELECT COUNT(*) FROM meetings WHERE candidate_id = ?");
+                        $stmt->execute([$profile['id']]);
+                        $meetingCount = $stmt->fetchColumn();
+                        ?>
+                        <h2 class="text-success fw-bold mb-0"><?= (int)$meetingCount ?></h2>
+                        <p class="small mb-0 text-muted">Moje schůzky</p>
+                    </div>
+                </a>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card p-3 text-center bg-white shadow-sm h-100 border-0">
-                    <h2 class="text-info fw-bold">0</h2>
-                    <p class="mb-0 text-muted">Rezervace přednášek</p>
-                </div>
+            <div class="col-md-4">
+                <a href="/lectures.php" class="text-decoration-none">
+                    <div class="card p-3 text-center bg-white shadow-sm h-100 border-0">
+                        <?php
+                        $stmt = $pdo->prepare("SELECT COUNT(*) FROM lecture_reservations WHERE candidate_id = ?");
+                        $stmt->execute([$profile['id']]);
+                        $lectureCount = $stmt->fetchColumn();
+                        ?>
+                        <h2 class="text-info fw-bold mb-0"><?= (int)$lectureCount ?></h2>
+                        <p class="small mb-0 text-muted">Rezervace přednášek</p>
+                    </div>
+                </a>
             </div>
         </div>
 
-        <div class="card p-4 shadow-sm border-0">
-            <h4 class="mb-4 fw-bold">Doporučené firmy a pozice pro vás</h4>
+        <div class="card p-4 shadow-sm border-0" id="recommended-jobs">
+            <h4 class="mb-4 fw-bold">Doporučené firmy a pozice</h4>
             
             <?php if (empty($recommendedJobs)): ?>
-                <div class="alert alert-info">Doplňte své dovednosti a seniority v profilu pro získání lepších doporučení.</div>
+                <div class="alert alert-info">Doplňte své dovednosti pro získání doporučení.</div>
             <?php else: ?>
-                <div class="row">
+                <div class="row g-3">
                     <?php foreach ($recommendedJobs as $job): ?>
-                        <div class="col-md-12 mb-3">
+                        <div class="col-12">
                             <div class="card border p-3">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <h5 class="mb-1 text-primary fw-bold"><?= e($job['title']) ?></h5>
-                                        <p class="mb-0"><strong><?= e($job['company_name']) ?></strong> | <?= e($job['location']) ?></p>
+                                        <p class="mb-0 small text-muted"><strong><?= e($job['company_name']) ?></strong> | <?= e($job['location']) ?></p>
                                     </div>
-                                    <div class="text-end">
-                                        <span class="badge badge-<?= $job['match_color'] ?> fs-6 rounded-pill px-3 py-2">
-                                            Shoda: <?= $job['match_score'] ?>%
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="mt-3">
-                                    <?php if ($job['skills']): ?>
-                                        <?php foreach (explode(',', $job['skills']) as $skill): ?>
-                                            <span class="badge bg-light text-dark border"><?= e(trim($skill)) ?></span>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
+                                    <span class="badge badge-<?= $job['match_color'] ?> rounded-pill px-3 py-2">Shoda <?= $job['match_score'] ?>%</span>
                                 </div>
                                 <div class="mt-3 text-end">
-                                    <a href="job_detail.php?id=<?= $job['id'] ?>" class="btn btn-sm btn-outline-primary rounded-pill">Zobrazit detail</a>
-                                    <a href="meeting_request.php?job_id=<?= $job['id'] ?>" class="btn btn-sm btn-success rounded-pill">Požádat o schůzku</a>
+                                    <a href="job_detail.php?id=<?= $job['id'] ?>" class="btn btn-sm btn-outline-primary rounded-pill">Detail</a>
+                                    <a href="meeting_request.php?job_id=<?= $job['id'] ?>" class="btn btn-sm btn-success rounded-pill ms-2">Schůzka</a>
                                 </div>
                             </div>
                         </div>
@@ -126,6 +120,5 @@ include_once __DIR__ . '/../templates/header.php';
 </div>
 
 <?php
-include_once __DIR__ . '/../templates/header.php';
+include_once __DIR__ . '/../templates/footer.php';
 ?>
-

@@ -36,32 +36,47 @@ include_once __DIR__ . '/../templates/header.php';
             </div>
 
             <div class="col-md-9">
-            <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card p-3 text-center bg-white h-100">
-                    <h2 class="text-primary"><?= count($jobs) ?></h2>
-                    <p class="mb-0">Otevřené pozice</p>
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card p-3 text-center bg-white shadow-sm h-100 border-0">
+                    <h2 class="text-primary fw-bold mb-0"><?= count($jobs) ?></h2>
+                    <p class="small mb-0 text-muted">Pozice</p>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
+            <div class="col-md-3">
                 <?php
-                // Count connections
                 $stmt = $pdo->prepare("SELECT COUNT(*) FROM profile_connections WHERE company_id = ?");
                 $stmt->execute([$company['id']]);
                 $connCount = $stmt->fetchColumn();
                 ?>
-                <div class="card p-3 text-center bg-white h-100">
-                    <h2 class="text-success"><?= $connCount ?></h2>
-                    <p class="mb-0">Spojení na místě</p>
+                <div class="card p-3 text-center bg-white shadow-sm h-100 border-0">
+                    <h2 class="text-success fw-bold mb-0"><?= $connCount ?></h2>
+                    <p class="small mb-0 text-muted">Spojení</p>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card p-3 text-center bg-white h-100">
-                    <h2 class="text-info">0</h2>
-                    <p class="mb-0">Plánované schůzky</p>
+            <div class="col-md-3">
+                <?php
+                $stmt = $pdo->prepare("SELECT COUNT(*) FROM meetings WHERE company_id = ? AND outcome = 'hired'");
+                $stmt->execute([$company['id']]);
+                $hiredCount = $stmt->fetchColumn();
+                ?>
+                <div class="card p-3 text-center bg-white shadow-sm h-100 border-0 border-bottom border-5 border-success">
+                    <h2 class="text-success fw-bold mb-0"><?= (int)$hiredCount ?></h2>
+                    <p class="small mb-0 text-muted fw-bold">PLÁCLI JSME SI!</p>
                 </div>
             </div>
+            <div class="col-md-3">
+                <?php
+                $stmt = $pdo->prepare("SELECT COUNT(*) FROM meetings WHERE company_id = ? AND status = 'pending'");
+                $stmt->execute([$company['id']]);
+                $pendingMeetings = $stmt->fetchColumn();
+                ?>
+                <div class="card p-3 text-center bg-white shadow-sm h-100 border-0">
+                    <h2 class="text-warning fw-bold mb-0"><?= (int)$pendingMeetings ?></h2>
+                    <p class="small mb-0 text-muted">Nové žádosti</p>
+                </div>
             </div>
+        </div>
 
             <!-- Recent connections -->
             <div class="card p-4 mb-4">
