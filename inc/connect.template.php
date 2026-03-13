@@ -8,7 +8,7 @@ define('DB_CHAR', 'utf8mb4');
 
 // App configuration
 define('APP_NAME', 'CareerExpo');
-define('BASE_URL', 'http://localhost/careerexpo');
+define('BASE_URL', '');
 define('DEBUG_MODE', true);
 
 // SMTP configuration (placeholder for PHPMailer)

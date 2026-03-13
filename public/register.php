@@ -86,7 +86,7 @@ include_once __DIR__ . '/../templates/header.php';
                 </div>
             </form>
             <div class="text-center mt-3">
-                Máte již účet? <a href="<?= BASE_URL ?>/login.php">Přihlásit se</a>
+                Máte již účet? <a href="/login.php">Přihlásit se</a>
             </div>
         </div>
     </div>

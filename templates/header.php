@@ -24,22 +24,22 @@
 <body>
     <nav class='navbar navbar-expand-lg navbar-dark bg-dark mb-4'>
         <div class='container'>
-            <a class='navbar-brand' href='<?= BASE_URL ?>/index.php'><?= e(APP_NAME) ?></a>
+            <a class='navbar-brand' href='/index.php'><?= e(APP_NAME) ?></a>
             <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-content='navbarNav'>
                 <span class='navbar-toggler-icon'></span>
             </button>
             <div class='collapse navbar-collapse' id='navbarNav'>
                 <ul class='navbar-nav ms-auto'>
                     <?php if (isLoggedIn()): ?>
-                        <li class='nav-item'><a class='nav-link' href='<?= BASE_URL ?>/dashboard.php'>Dashboard</a></li>
+                        <li class='nav-item'><a class='nav-link' href='/dashboard.php'>Dashboard</a></li>
                         <?php if (hasRole('candidate')): ?>
-                            <li class='nav-item'><a class='nav-link' href='<?= BASE_URL ?>/stands.php'>Mapa stánků</a></li>
-                            <li class='nav-item'><a class='nav-link' href='<?= BASE_URL ?>/lectures.php'>Přednášky</a></li>
+                            <li class='nav-item'><a class='nav-link' href='/stands.php'>Mapa stánků</a></li>
+                            <li class='nav-item'><a class='nav-link' href='/lectures.php'>Přednášky</a></li>
                         <?php endif; ?>
-                        <li class='nav-item'><a class='nav-link' href='<?= BASE_URL ?>/logout.php'>Odhlásit</a></li>
+                        <li class='nav-item'><a class='nav-link' href='/logout.php'>Odhlásit</a></li>
                     <?php else: ?>
-                        <li class='nav-item'><a class='nav-link' href='<?= BASE_URL ?>/login.php'>Přihlášení</a></li>
-                        <li class='nav-item'><a class='nav-link' href='<?= BASE_URL ?>/register.php'>Registrace</a></li>
+                        <li class='nav-item'><a class='nav-link' href='/login.php'>Přihlášení</a></li>
+                        <li class='nav-item'><a class='nav-link' href='/register.php'>Registrace</a></li>
                     <?php endif; ?>
                 </ul>
             </div>

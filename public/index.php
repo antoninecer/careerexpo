@@ -8,10 +8,10 @@ include_once __DIR__ . '/../templates/header.php';
     <p class="lead text-muted mb-5">Místo, kde se setkávají talentovaní uchazeči a vizionářské firmy.</p>
     <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
         <?php if (!isLoggedIn()): ?>
-            <a href="<?= BASE_URL ?>/register.php" class="btn btn-primary btn-lg px-4 gap-3 rounded-pill">Zaregistrovat se</a>
-            <a href="<?= BASE_URL ?>/login.php" class="btn btn-outline-secondary btn-lg px-4 rounded-pill">Přihlásit se</a>
+            <a href="/register.php" class="btn btn-primary btn-lg px-4 gap-3 rounded-pill">Zaregistrovat se</a>
+            <a href="/login.php" class="btn btn-outline-secondary btn-lg px-4 rounded-pill">Přihlásit se</a>
         <?php else: ?>
-            <a href="<?= BASE_URL ?>/dashboard.php" class="btn btn-primary btn-lg px-4 gap-3 rounded-pill">Přejít do dashboardu</a>
+            <a href="/dashboard.php" class="btn btn-primary btn-lg px-4 gap-3 rounded-pill">Přejít do dashboardu</a>
         <?php endif; ?>
     </div>
 </div>

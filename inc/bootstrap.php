@@ -49,7 +49,7 @@ try {
 
 // Global helper functions
 function redirect($path) {
-    header("Location: " . BASE_URL . $path);
+    header("Location: " . $path);
     exit;
 }
 
