@@ -1,84 +1,150 @@
-Základem pro vytvoření tohoto souboru by mělo být následující. Tento příklad je závislý na několika předpokládaných třídách a funkcích, které nemusí existovat ve vašem projektu.
-
 <?php
-require_once 'vendor/autoload.php';
-require_once 'models/Job.php';
-require_once 'services/MatchingService.php';
+require_once __DIR__ . '/../inc/bootstrap.php';
+requireRole('company');
+requireEvent();
 
-session_start();
+$eventId = getCurrentEventId();
+$companyId = $_SESSION['profile_id'];
+$jobId = (int)($_GET['id'] ?? 0);
 
-// Require company role
-if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'company') {
-    die('Unauthorized');
+if (!$jobId) {
+    redirect('/dashboard.php');
 }
 
-// Load job id from GET, validate ownership
-$job_id = $_GET['job_id'] ?? null;
-if (!$job_id || !Job::validateOwnership($job_id, $_SESSION['user']['company_id'])) {
-    die('Unauthorized');
+// Fetch job and verify ownership
+$stmt = $pdo->prepare("SELECT * FROM jobs WHERE id = ? AND company_id = ?");
+$stmt->execute([$jobId, $companyId]);
+$job = $stmt->fetch();
+
+if (!$job) {
+    $_SESSION['flash_error'] = 'Pozice nebyla nalezena nebo nemáte oprávnění ji upravovat.';
+    redirect('/dashboard.php');
 }
 
-$job = Job::load($job_id);
+$error = '';
 
-// CSRF protection
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        die('Invalid CSRF token');
+    validateCsrf();
+    
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $skills = $_POST['skills'];
+    $seniority = $_POST['seniority'];
+    $location = $_POST['location'];
+    $collaboration_type = $_POST['collaboration_type'];
+    $languages = $_POST['languages'];
+    $priority = $_POST['priority'];
+    $salary_range = $_POST['salary_range'];
+
+    if (empty($title) || empty($description)) {
+        $error = 'Název a popis pozice jsou povinné údaje.';
+    } else {
+        try {
+            $stmt = $pdo->prepare("UPDATE jobs SET 
+                title = ?, description = ?, skills = ?, seniority = ?, 
+                location = ?, collaboration_type = ?, languages = ?, 
+                priority = ?, salary_range = ? 
+                WHERE id = ? AND company_id = ?");
+            
+            $stmt->execute([
+                $title, $description, $skills, $seniority, 
+                $location, $collaboration_type, $languages, 
+                $priority, $salary_range, $jobId, $companyId
+            ]);
+
+            // Update matches for this job
+            require_once __DIR__ . '/../src/MatchingService.php';
+            $matcher = new \App\MatchingService($pdo);
+            $matcher->updateAllMatchesForJob($jobId);
+
+            $_SESSION['flash_success'] = 'Pracovní pozice byla úspěšně aktualizována.';
+            redirect('/dashboard.php');
+        } catch (Exception $e) {
+            $error = 'Chyba při ukládání: ' . $e->getMessage();
+        }
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Update job
-    $job->name = $_POST['name'] ?? $job->name;
-    $job->description = $_POST['description'] ?? $job->description;
-    $job->skills = $_POST['skills'] ?? $job->skills;
-    $job->seniority = $_POST['seniority'] ?? $job->seniority;
-    $job->location = $_POST['location'] ?? $job->location;
-    $job->collaboration_type = $_POST['collaboration_type'] ?? $job->collaboration_type;
-    $job->languages = $_POST['languages'] ?? $job->languages;
-    $job->priority = $_POST['priority'] ?? $job->priority;
-    $job->salary_range = $_POST['salary_range'] ?? $job->salary_range;
-
-    $job->save();
-
-    // Update matches
-    MatchingService::updateAllMatchesForJob($job_id);
-
-    header('Location: job_detail.php?job_id=' . $job_id);
-    exit;
-}
-
-// Render form
-require_once 'templates/job_edit.php';
-
-function validateCsrf() {
-    // Generate a new CSRF token
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-
-function getCsrfInput() {
-    return '<input type="hidden" name="csrf_token" value="' . $_SESSION['csrf_token'] . '">';
-}
+include_once __DIR__ . '/../templates/header.php';
 ?>
 
-Potom byste měli mít `templates/job_edit.php` soubor, který by mohl vypadat takto:
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 p-4">
+            <h2 class="mb-4 fw-bold text-primary">Upravit pracovní pozici</h2>
+            <?php if ($error): ?>
+                <div class="alert alert-danger small"><?= e($error) ?></div>
+            <?php endif; ?>
+            
+            <form method="post">
+                <?= getCsrfInput() ?>
+                <div class="mb-3">
+                    <label class="form-label fw-bold small">Název pozice</label>
+                    <input type="text" name="title" class="form-control rounded-pill" value="<?= e($job['title']) ?>" required>
+                </div>
 
-<?php include 'templates/header.php'; ?>
+                <div class="mb-3">
+                    <label class="form-label fw-bold small">Popis pozice</label>
+                    <textarea name="description" class="form-control" rows="5" style="border-radius: 15px;" required><?= e($job['description']) ?></textarea>
+                </div>
 
-<h1>Edit Job</h1>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold small">Lokalita</label>
+                        <input type="text" name="location" class="form-control rounded-pill" value="<?= e($job['location']) ?>">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold small">Seniorita</label>
+                        <select name="seniority" class="form-select rounded-pill">
+                            <option value="junior" <?= $job['seniority'] == 'junior' ? 'selected' : '' ?>>Junior</option>
+                            <option value="mid" <?= $job['seniority'] == 'mid' ? 'selected' : '' ?>>Mid-level</option>
+                            <option value="senior" <?= $job['seniority'] == 'senior' ? 'selected' : '' ?>>Senior</option>
+                            <option value="expert" <?= $job['seniority'] == 'expert' ? 'selected' : '' ?>>Expert / Architect</option>
+                        </select>
+                    </div>
+                </div>
 
-<form method="post">
-    <?= getCsrfInput() ?>
-    <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control" id="name" name="name" value="<?= $job->name ?>">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold small">Typ spolupráce</label>
+                        <select name="collaboration_type" class="form-select rounded-pill">
+                            <option value="onsite" <?= $job['collaboration_type'] == 'onsite' ? 'selected' : '' ?>>On-site</option>
+                            <option value="hybrid" <?= $job['collaboration_type'] == 'hybrid' ? 'selected' : '' ?>>Hybrid</option>
+                            <option value="remote" <?= $job['collaboration_type'] == 'remote' ? 'selected' : '' ?>>Remote</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold small">Priorita zobrazení</label>
+                        <select name="priority" class="form-select rounded-pill">
+                            <option value="low" <?= $job['priority'] == 'low' ? 'selected' : '' ?>>Nízká</option>
+                            <option value="medium" <?= $job['priority'] == 'medium' ? 'selected' : '' ?>>Střední</option>
+                            <option value="high" <?= $job['priority'] == 'high' ? 'selected' : '' ?>>Vysoká (VIP)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold small">Požadované dovednosti (oddělené čárkou)</label>
+                    <input type="text" name="skills" class="form-control rounded-pill" value="<?= e($job['skills']) ?>">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold small">Jazykové požadavky</label>
+                    <input type="text" name="languages" class="form-control rounded-pill" value="<?= e($job['languages']) ?>">
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold small">Mzdové rozpětí / Odměna</label>
+                    <input type="text" name="salary_range" class="form-control rounded-pill" value="<?= e($job['salary_range']) ?>">
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                    <a href="/dashboard.php" class="btn btn-outline-secondary rounded-pill px-4">Zrušit</a>
+                    <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow">Uložit změny</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <!-- Add more form fields as needed -->
-    <button type="submit" class="btn btn-primary">Save</button>
-</form>
+</div>
 
-<?php include 'templates/footer.php'; ?>
-
-Tento příklad je závislý na několika předpokládaných třídách a funkcích, které nemusí existovat ve vašem projektu. Například třída `Job`, která by měla mít metody `load`, `validateOwnership` a `save`, a také třída `MatchingService`, která by měla mít metodu `updateAllMatchesForJob`.
-
-
+<?php include_once __DIR__ . '/../templates/footer.php'; ?>

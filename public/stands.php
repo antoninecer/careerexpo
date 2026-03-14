@@ -1,43 +1,60 @@
-Není možné bez přístupu k aktuálním souborům a kontextu aplikace. Proto můžeme předpokládat, že máte taková funkce v kódu, který chcete upravit. Prostě si to někdy připravte.
-
-```php
 <?php
-function getCurrentEventId() {
-    // Implementace pro získání aktuálního event_id
-    // Může být konstanta, může být získána z nějakého konfiguračního souboru, může být také získána z databáze
-    // Tato funkce by měla vracet aktuální event_id
-}
+require_once __DIR__ . '/../inc/bootstrap.php';
+requireRole('candidate');
+requireEvent();
 
-function requireEvent() {
-    // Implementace pro načtení obsahu specifického pro daný event
-    // Může obsahovat nastavení, může obsahovat i vlastní logiku, která se má použít pro zpracování eventu
-    // Tato funkce by měla vracet obsah specifický pro daný event
-}
+$eventId = getCurrentEventId();
 
-function filterStands() {
-    $event_id = getCurrentEventId();
-    if (!$event_id) {
-        // Pokud není event_id, vypiš chybu
-        return;
-    }
+// Fetch stands with companies for current event
+$stmt = $pdo->prepare("SELECT s.*, cp.name as company_name, cp.id as company_id 
+                    FROM stands s 
+                    LEFT JOIN company_profiles cp ON s.id = cp.stand_id 
+                    WHERE s.event_id = ?
+                    ORDER BY s.zone, s.name");
+$stmt->execute([$eventId]);
+$stands = $stmt->fetchAll();
 
-    // Načti obsah specifický pro daný event
-    $content = requireEvent($event_id);
-
-    // TODO: Implementace pro filtrování stánků podle event_id
-
-    // Vrátí obsah po filtrování
-    return $content;
-}
-
-// Spustíme filtr stánků
-$filtered_stands = filterStands();
-
-// Vypíšeme filtrované stánky
-echo $filtered_stands;
+include_once __DIR__ . '/../templates/header.php';
 ?>
-```
 
-Udělejte si tohle ve svém prostředí a mějte si s ním dobrých zážitek.
+<h2 class="mb-4 fw-bold text-primary">Mapa stánků a vystavovatelé</h2>
 
+<div class="row">
+    <?php if (empty($stands)): ?>
+        <div class="col-12">
+            <div class="alert alert-info border-0 shadow-sm">Pro tuto akci zatím nebyly definovány žádné stánky.</div>
+        </div>
+    <?php else: ?>
+        <?php foreach ($stands as $stand): ?>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title fw-bold mb-0"><?= e($stand['name']) ?></h5>
+                            <span class="badge bg-info text-dark rounded-pill"><?= e($stand['zone']) ?></span>
+                        </div>
+                        <p class="card-text text-muted small mb-3"><i class="bi bi-geo-alt"></i> <?= e($stand['location']) ?></p>
+                        <hr class="opacity-10">
+                        <?php if ($stand['company_id']): ?>
+                            <p class="mb-1 small"><strong>Firma:</strong></p>
+                            <h6 class="fw-bold mb-3"><?= e($stand['company_name']) ?></h6>
+                            <a href="/company_detail.php?id=<?= $stand['company_id'] ?>" class="btn btn-sm btn-primary w-100 rounded-pill shadow-sm">Zobrazit firmu</a>
+                        <?php else: ?>
+                            <p class="mb-0 text-muted italic small">Volný stánek</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
 
+<div class="mt-5 p-4 bg-white rounded shadow-sm border-start border-5 border-primary">
+    <h4 class="fw-bold">Doporučená trasa</h4>
+    <p class="text-muted small">Na základě vašich preferencí a matchingu doporučujeme navštívit tyto stánky jako první.</p>
+    <div class="alert alert-secondary border-0 mb-0 small">
+        <i class="bi bi-info-circle me-2"></i>Brzy dostupné: Automatické generování trasy podle nejvyšší shody.
+    </div>
+</div>
+
+<?php include_once __DIR__ . '/../templates/footer.php'; ?>
