@@ -80,11 +80,17 @@ include_once __DIR__ . '/../templates/header.php';
                                 <span class="badge bg-light text-dark border"><?= $c['job_count'] ?></span>
                             </td>
                             <td class="text-end">
-                                <a href="/admin_companies.php?delete=<?= $c['id'] ?>" 
-                                   class="btn btn-sm btn-outline-danger border-0" 
-                                   onclick="return confirm('Opravdu chcete smazat firmu <?= e($c['name']) ?> a její uživatelský účet?');">
-                                    <i class="bi bi-trash"></i>
-                                </a>
+                                <div class="btn-group">
+                                    <a href="/admin_company_edit.php?id=<?= $c['id'] ?>" 
+                                       class="btn btn-sm btn-outline-primary border-0">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a href="/admin_companies.php?delete=<?= $c['id'] ?>" 
+                                       class="btn btn-sm btn-outline-danger border-0" 
+                                       onclick="return confirm('Opravdu chcete smazat firmu <?= e($c['name']) ?> a její uživatelský účet?');">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
