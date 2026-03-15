@@ -38,6 +38,18 @@
             <div class='collapse navbar-collapse' id='navbarNav'>
                 <ul class='navbar-nav ms-auto small'>
                     <?php if (isLoggedIn()): ?>
+                        <?php if (hasRole('admin')): ?>
+                            <li class='nav-item dropdown'>
+                                <a class='nav-link dropdown-toggle' href='#' id='adminDropdown' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                                    <i class='bi bi-gear-fill'></i> Globální Admin
+                                </a>
+                                <ul class='dropdown-menu dropdown-menu-dark' aria-labelledby='adminDropdown'>
+                                    <li><a class='dropdown-item' href='/admin_companies.php'><i class='bi bi-building'></i> Správa firem</a></li>
+                                    <li><a class='dropdown-item' href='/admin_company_add.php'><i class='bi bi-plus-circle'></i> Přidat firmu</a></li>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
+
                         <?php if (getCurrentEventId()): 
                             $stmt = $pdo->prepare("SELECT name FROM events WHERE id = ?");
                             $stmt->execute([getCurrentEventId()]);
@@ -53,6 +65,7 @@
                             <?php endif; ?>
                         <?php else: ?>
                             <li class='nav-item'><a class='nav-link' href='/events.php'>Vybrat akci</a></li>
+                            <li class='nav-item border-start ms-2 ps-2'><a class='nav-link' href='/dashboard.php'>Dashboard</a></li>
                         <?php endif; ?>
                         <li class='nav-item'><a class='nav-link text-danger' href='/logout.php'>Odhlásit</a></li>
                     <?php else: ?>

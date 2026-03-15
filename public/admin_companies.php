@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../inc/bootstrap.php';
-requireRole('admin');
+requireAdmin();
 
 // Handle Deletion
 if (isset($_GET['delete'])) {
@@ -104,4 +104,4 @@ include_once __DIR__ . '/../templates/header.php';
     <p>Smazáním firmy dojde k trvalému odstranění všech jejích pozic, schůzek a uživatelského přístupu.</p>
 </div>
 
-<?php include_once __DIR__ . '/../templates/header.php'; ?>
+<?php include_once __DIR__ . '/../templates/footer.php'; ?>

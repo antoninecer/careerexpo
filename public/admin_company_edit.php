@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/../inc/bootstrap.php';
-requireRole('admin');
-requireEvent();
+requireAdmin();
 
 $companyId = (int)($_GET['id'] ?? 0);
 if (!$companyId) {

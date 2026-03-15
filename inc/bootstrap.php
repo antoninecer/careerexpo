@@ -52,14 +52,27 @@ function getCurrentEventId() {
     return $_SESSION['current_event_id'] ?? null;
 }
 
-function requireEvent() {
+function hasCurrentEvent() {
+    return getCurrentEventId() !== null;
+}
+
+function getOptionalCurrentEventId() {
+    return getCurrentEventId();
+}
+
+function requireEventContext() {
     if (isLoggedIn() && !getCurrentEventId()) {
         // Exclude events selection page itself from redirection
-        if (basename($_SERVER['PHP_SELF']) !== 'events.php' && basename($_SERVER['PHP_SELF']) !== 'logout.php') {
+        $currentFile = basename($_SERVER['PHP_SELF']);
+        if ($currentFile !== 'events.php' && $currentFile !== 'logout.php' && $currentFile !== 'login.php') {
             header("Location: /events.php");
             exit;
         }
     }
+}
+
+function requireEvent() {
+    requireEventContext();
 }
 
 // Global helper functions
@@ -89,3 +102,6 @@ function requireRole($role) {
     }
 }
 
+function requireAdmin() {
+    requireRole('admin');
+}
