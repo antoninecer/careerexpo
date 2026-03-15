@@ -40,12 +40,15 @@
                     <?php if (isLoggedIn()): ?>
                         <?php if (hasRole('admin')): ?>
                             <li class='nav-item dropdown'>
-                                <a class='nav-link dropdown-toggle' href='#' id='adminDropdown' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                                    <i class='bi bi-gear-fill'></i> Globální Admin
+                                <a class='nav-link dropdown-toggle' href='#' id='adminGlobalDropdown' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                                    <i class='bi bi-globe'></i> Globální Admin
                                 </a>
-                                <ul class='dropdown-menu dropdown-menu-dark' aria-labelledby='adminDropdown'>
-                                    <li><a class='dropdown-item' href='/admin_companies.php'><i class='bi bi-building'></i> Správa firem</a></li>
+                                <ul class='dropdown-menu dropdown-menu-dark' aria-labelledby='adminGlobalDropdown'>
+                                    <li><a class='dropdown-item' href='/admin_events.php'><i class='bi bi-calendar-event'></i> Správa akcí</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class='dropdown-item' href='/admin_companies.php'><i class='bi bi-building'></i> Všichni vystavovatelé</a></li>
                                     <li><a class='dropdown-item' href='/admin_company_add.php'><i class='bi bi-plus-circle'></i> Přidat firmu</a></li>
+                                    <li><a class='dropdown-item' href='/admin_candidates.php'><i class='bi bi-people'></i> Všichni uchazeči</a></li>
                                 </ul>
                             </li>
                         <?php endif; ?>
@@ -55,13 +58,31 @@
                             $stmt->execute([getCurrentEventId()]);
                             $eventName = $stmt->fetchColumn();
                         ?>
-                            <li class='nav-item'><span class='nav-link text-warning fw-bold'><i class='bi bi-calendar-event'></i> <?= e($eventName) ?></span></li>
-                            <li class='nav-item'><a class='nav-link' href='/events.php'><i class='bi bi-shuffle'></i> Přepnout akci</a></li>
-                            <li class='nav-item border-start ms-2 ps-2'><a class='nav-link' href='/dashboard.php'>Dashboard</a></li>
-                            <?php if (hasRole('candidate')): ?>
-                                <li class='nav-item'><a class='nav-link' href='/stands.php'>Mapa stánků</a></li>
-                                <li class='nav-item'><a class='nav-link' href='/lectures.php'>Přednášky</a></li>
-                                <li class='nav-item'><a class='nav-link' href='/meetings.php'>Moje schůzky</a></li>
+                            <?php if (hasRole('admin')): ?>
+                                <li class='nav-item dropdown'>
+                                    <a class='nav-link dropdown-toggle text-info fw-bold' href='#' id='adminEventDropdown' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                                        <i class='bi bi-layers-half'></i> Správa: <?= e($eventName) ?>
+                                    </a>
+                                    <ul class='dropdown-menu dropdown-menu-dark' aria-labelledby='adminEventDropdown'>
+                                        <li><a class='dropdown-item' href='/dashboard.php'><i class='bi bi-speedometer2'></i> Dashboard akce</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class='dropdown-item' href='/admin_stands.php'><i class='bi bi-geo-alt'></i> Stánky</a></li>
+                                        <li><a class='dropdown-item' href='/admin_lectures.php'><i class='bi bi-mic'></i> Přednášky</a></li>
+                                        <li><a class='dropdown-item' href='/admin_jobs.php'><i class='bi bi-briefcase'></i> Pozice</a></li>
+                                        <li><a class='dropdown-item' href='/admin_meetings.php'><i class='bi bi-chat-dots'></i> Schůzky</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class='dropdown-item text-warning' href='/events.php'><i class='bi bi-shuffle'></i> Přepnout akci</a></li>
+                                    </ul>
+                                </li>
+                            <?php else: ?>
+                                <li class='nav-item'><span class='nav-link text-warning fw-bold'><i class='bi bi-calendar-event'></i> <?= e($eventName) ?></span></li>
+                                <li class='nav-item'><a class='nav-link' href='/events.php'><i class='bi bi-shuffle'></i> Přepnout akci</a></li>
+                                <li class='nav-item border-start ms-2 ps-2'><a class='nav-link' href='/dashboard.php'>Dashboard</a></li>
+                                <?php if (hasRole('candidate')): ?>
+                                    <li class='nav-item'><a class='nav-link' href='/stands.php'>Mapa stánků</a></li>
+                                    <li class='nav-item'><a class='nav-link' href='/lectures.php'>Přednášky</a></li>
+                                    <li class='nav-item'><a class='nav-link' href='/meetings.php'>Moje schůzky</a></li>
+                                <?php endif; ?>
                             <?php endif; ?>
                         <?php else: ?>
                             <li class='nav-item'><a class='nav-link' href='/events.php'>Vybrat akci</a></li>
