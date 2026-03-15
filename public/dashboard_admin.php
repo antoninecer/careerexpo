@@ -108,7 +108,20 @@ include_once __DIR__ . '/../templates/header.php';
         </div>
     </div>
 
-    <div class="col-md-6 mb-4">
+    <div class="col-md-4 mb-4">
+        <div class="card p-4 shadow-sm border-0 h-100 bg-light">
+            <h4 class="fw-bold mb-3"><i class="bi bi-gear-fill me-2 text-secondary"></i>Konfigurace a Nápověda</h4>
+            <div class="d-grid gap-2">
+                <a href="/admin_events.php" class="btn btn-outline-dark rounded-pill">Spravovat všechny akce</a>
+                <a href="/help.php" class="btn btn-primary rounded-pill fw-bold shadow-sm">
+                    <i class="bi bi-question-circle me-2"></i>Centrum nápovědy
+                </a>
+            </div>
+            <p class="small text-muted mt-3 mb-0">Zde najdete instrukce pro nastavení akcí a správu uživatelů.</p>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
         <div class="card p-4 shadow-sm border-0 h-100">
             <h4 class="fw-bold mb-3">Správa Vystavovatelů</h4>
             <div class="d-grid gap-2">
@@ -118,7 +131,7 @@ include_once __DIR__ . '/../templates/header.php';
         </div>
     </div>
 
-    <div class="col-md-6 mb-4">
+    <div class="col-md-4 mb-4">
         <div class="card p-4 shadow-sm border-0 h-100">
             <h4 class="fw-bold mb-3">Program a Stánky</h4>
             <div class="d-grid gap-2">

@@ -88,8 +88,8 @@
                             <li class='nav-item'><a class='nav-link' href='/events.php'>Vybrat akci</a></li>
                             <li class='nav-item border-start ms-2 ps-2'><a class='nav-link' href='/dashboard.php'>Dashboard</a></li>
                         <?php endif; ?>
-                        <li class='nav-item'><a class='nav-link text-danger' href='/logout.php'>Odhlásit</a></li>
-                    <?php else: ?>
+                        <li class='nav-item'><a class='nav-link' href='/help.php'><i class='bi bi-question-circle'></i> Nápověda</a></li>
+                        <li class='nav-item'><a class='nav-link text-danger' href='/logout.php'>Odhlásit</a></li>                    <?php else: ?>
                         <li class='nav-item'><a class='nav-link' href='/login.php'>Přihlášení</a></li>
                         <li class='nav-item'><a class='nav-link' href='/register.php'>Registrace</a></li>
                     <?php endif; ?>

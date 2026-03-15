@@ -49,7 +49,9 @@ include_once __DIR__ . '/../templates/header.php';
             <p class="mb-1 small"><strong>Typ:</strong> <?= $company['type'] === 'physical' ? 'Fyzicky' : 'Virtuálně' ?></p>
 
             <div class="mt-4 p-3 bg-light rounded text-center">
-                <p class="small mb-2 fw-bold">Párovací kód firmy:</p>
+                <p class="small mb-2 fw-bold">Párovací kód firmy: 
+                    <i class="bi bi-info-circle ms-1 text-primary" data-bs-toggle="tooltip" title="Ukažte tento kód uchazeči u stánku. Po zadání kódu do jeho profilu dojde k okamžitému propojení a sdílení kontaktu."></i>
+                </p>
                 <h3 class="text-primary fw-bold mb-3"><?= e($company['pairing_code']) ?></h3>
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?= urlencode($company['pairing_code']) ?>" alt="QR kód" class="img-fluid mb-2 rounded shadow-sm">
                 <p class="small text-muted mb-0">Ukažte tento kód uchazeči.</p>
@@ -58,8 +60,25 @@ include_once __DIR__ . '/../templates/header.php';
             <a href="/company_edit.php" class="btn btn-sm btn-outline-primary w-100 rounded-pill mt-4">Upravit profil / virtuální stánek</a>
         </div>
 
+        <div class="card p-4 mb-4 shadow-sm border-0 bg-light">
+            <h5 class="card-title fw-bold text-dark"><i class="bi bi-lightbulb me-2 text-warning"></i>Rychlá pomoc</h5>
+            <div class="list-group list-group-flush bg-transparent small">
+                <a href="/company_edit.php" class="list-group-item list-group-item-action bg-transparent border-0 px-0">
+                    <i class="bi bi-1-circle me-2 text-primary"></i>Vyplňte firemní profil
+                </a>
+                <a href="/job_add.php" class="list-group-item list-group-item-action bg-transparent border-0 px-0">
+                    <i class="bi bi-2-circle me-2 text-primary"></i>Přidejte pracovní pozice
+                </a>
+                <a href="/help.php" class="list-group-item list-group-item-action bg-transparent border-0 px-0 fw-bold">
+                    <i class="bi bi-question-circle me-2"></i>Kompletní nápověda
+                </a>
+            </div>
+        </div>
+
         <div class="card p-3 mb-4 shadow-sm border-0 bg-primary text-white">
-            <h5 class="card-title fw-bold">Rychlé spojení</h5>
+            <h5 class="card-title fw-bold">Rychlé spojení 
+                <i class="bi bi-info-circle ms-1 small" data-bs-toggle="tooltip" title="Zadejte unikátní kód uchazeče, který vám ukáže. Dojde k okamžitému uložení jeho profilu do vaší databáze."></i>
+            </h5>
             <p class="small mb-3">Zadejte kód kandidáta, kterého máte před sebou:</p>
             <form action="/pair.php" method="post">
                 <?= getCsrfInput() ?>
