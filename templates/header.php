@@ -95,6 +95,7 @@
                             <li class='nav-item'><a class='nav-link' href='/login.php'>Přihlášení</a></li>
                             <li class='nav-item'><a class='nav-link' href='/register.php'>Registrace</a></li>
                         <?php endif; ?>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
