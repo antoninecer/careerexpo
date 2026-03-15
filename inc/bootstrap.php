@@ -105,3 +105,32 @@ function requireRole($role) {
 function requireAdmin() {
     requireRole('admin');
 }
+
+/**
+ * Převede běžnou YouTube URL na embed verzi pro iframe
+ */
+function getYouTubeEmbedUrl($url) {
+    if (empty($url)) return '';
+    
+    // Pokud už je to embed link, vrátíme ho
+    if (strpos($url, 'youtube.com/embed/') !== false) {
+        return $url;
+    }
+    
+    $videoId = '';
+    
+    // youtube.com/watch?v=XXXX
+    if (preg_match('/v=([a-zA-Z0-9_-]+)/', $url, $matches)) {
+        $videoId = $matches[1];
+    }
+    // youtu.be/XXXX
+    elseif (preg_match('/youtu\.be\/([a-zA-Z0-9_-]+)/', $url, $matches)) {
+        $videoId = $matches[1];
+    }
+    
+    if ($videoId) {
+        return "https://www.youtube.com/embed/" . $videoId;
+    }
+    
+    return $url;
+}

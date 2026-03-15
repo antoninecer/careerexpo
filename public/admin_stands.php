@@ -35,6 +35,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_stand'])) {
     }
 }
 
+// Handle Edit
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_stand'])) {
+    validateCsrf();
+    $id = (int)$_POST['stand_id'];
+    $name = $_POST['name'];
+    $zone = $_POST['zone'];
+    $location = $_POST['location'];
+
+    try {
+        $stmt = $pdo->prepare("UPDATE stands SET name = ?, zone = ?, location = ? WHERE id = ? AND event_id = ?");
+        $stmt->execute([$name, $zone, $location, $id, $eventId]);
+        $_SESSION['flash_success'] = "Stánek '$name' byl upraven.";
+        redirect('/admin_stands.php');
+    } catch (Exception $e) {
+        $_SESSION['flash_error'] = 'Chyba při úpravě: ' . $e->getMessage();
+    }
+}
+
 // Fetch all stands for current event
 $stmt = $pdo->prepare("SELECT s.*, cp.name as company_name 
                       FROM stands s 
@@ -85,11 +103,17 @@ include_once __DIR__ . '/../templates/header.php';
                                 <?php endif; ?>
                             </td>
                             <td class="text-end">
-                                <a href="/admin_stands.php?delete=<?= $s['id'] ?>" 
-                                   class="btn btn-sm btn-outline-danger border-0" 
-                                   onclick="return confirm('Opravdu chcete smazat tento stánek?');">
-                                    <i class="bi bi-trash"></i>
-                                </a>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-info border-0" title="Upravit stánek" 
+                                            onclick='editStand(<?= json_encode($s) ?>)'>
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <a href="/admin_stands.php?delete=<?= $s['id'] ?>" 
+                                       class="btn btn-sm btn-outline-danger border-0" 
+                                       onclick="return confirm('Opravdu chcete smazat tento stánek?');">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -132,5 +156,51 @@ include_once __DIR__ . '/../templates/header.php';
         </div>
     </div>
 </div>
+
+<!-- Edit Stand Modal -->
+<div class="modal fade" id="editStandModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">Upravit stánek</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post">
+                <div class="modal-body">
+                    <?= getCsrfInput() ?>
+                    <input type="hidden" name="edit_stand" value="1">
+                    <input type="hidden" name="stand_id" id="edit_stand_id">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Název / Označení stánku</label>
+                        <input type="text" name="name" id="edit_stand_name" class="form-control rounded-pill" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Zóna / Hala</label>
+                        <input type="text" name="zone" id="edit_stand_zone" class="form-control rounded-pill" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Přesnější popis umístění</label>
+                        <input type="text" name="location" id="edit_stand_location" class="form-control rounded-pill">
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Zrušit</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Uložit změny</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function editStand(stand) {
+    document.getElementById('edit_stand_id').value = stand.id;
+    document.getElementById('edit_stand_name').value = stand.name;
+    document.getElementById('edit_stand_zone').value = stand.zone;
+    document.getElementById('edit_stand_location').value = stand.location;
+    
+    new bootstrap.Modal(document.getElementById('editStandModal')).show();
+}
+</script>
 
 <?php include_once __DIR__ . '/../templates/footer.php'; ?>

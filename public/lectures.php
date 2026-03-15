@@ -68,9 +68,16 @@ include_once __DIR__ . '/../templates/header.php';
                                         
                                         <div class="mt-auto pt-3 border-top">
                                             <?php if ($lecture['is_reserved'] && $lecture['is_virtual'] && $lecture['stream_url']): ?>
-                                                <a href="<?= e($lecture['stream_url']) ?>" target="_blank" class="btn btn-primary btn-sm w-100 rounded-pill mb-3 shadow">
-                                                    <i class="bi bi-play-circle me-2"></i> Sledovat stream
-                                                </a>
+                                                <div class="mb-3">
+                                                    <?php if (strpos($lecture['stream_url'], 'youtube.com') !== false || strpos($lecture['stream_url'], 'youtu.be') !== false): ?>
+                                                        <div class="ratio ratio-16x9 mb-2 rounded overflow-hidden shadow-sm">
+                                                            <iframe src="<?= e(getYouTubeEmbedUrl($lecture['stream_url'])) ?>" allowfullscreen></iframe>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                    <a href="<?= e($lecture['stream_url']) ?>" target="_blank" class="btn btn-primary btn-sm w-100 rounded-pill shadow">
+                                                        <i class="bi bi-play-circle me-2"></i> Otevřít stream v novém okně
+                                                    </a>
+                                                </div>
                                             <?php endif; ?>
 
                                             <div class="d-flex justify-content-between align-items-center mb-1">

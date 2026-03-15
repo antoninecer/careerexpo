@@ -1,43 +1,48 @@
-# CareerExpo: Modernizace a měření úspěšnosti kariérních veletrhů
+# CareerExpo - Platforma pro moderní kariérní veletrhy
 
-## Misi projektu
-CareerExpo přináší revoluci do organizace a měření úspěšnosti kariérních veletrhů, kombinujíc moderní technologie s konvencními formy představení. Nabízí efektivní, uživatelsky přívětivé platformu pro hledání práce a výběr kariéry, zlepšující zkušenosti kandidátů a pracovníků a poskytující analytické zdroje pro organizátory veletrhů.
+CareerExpo je komplexní PHP platforma navržená pro správu fyzických, virtuálních i hybridních kariérních veletrhů. Propojuje talentované uchazeče s předními firmami a poskytuje organizátorům nástroje pro měření reálného dopadu akce.
 
-## Klíčové inovace
-- **Multi-event architektura**: Škálovatelnost pro neomezené množství akcí, což umožňuje organizaci více veletrhů v různých fázích roků.
-- **Inteligentní Heuristický Matching**: Propojení kandidátů na základě seniority, dovedností a lokality, maximizující pravděpodobnost uzavření úspěšných přeshranicových případů.
-- **On-site & Virtual Experience**: QR párování, video streamy, virtuální stánky pro neomezenou interakci, jak online, tak offline.
-- **Success Loop**: Reálný reporting uzavřených kontraktů, podporující zlepšení zkušeností a efektivitu veletrhů.
+## 🚀 Klíčové Funkce
 
-## Aktuální stav
-Plně funkční prototyp připravený k testování. Je už možné provést registraci, nahrávání CV, matching v dashboardu, rezervaci přednášek, on-site párování přes kód a další funkcionalitou.
+### 📅 Multi-event Architektura
+*   **Správa více ročníků:** Možnost provozovat neomezené množství akcí v rámci jedné instalace.
+*   **Historie a kontinuita:** Uchazeči i firmy si ponechávají profily napříč různými veletrhy.
 
-## Co testovat
-- **Registrace**: Ujistěte se, že je přihlašovací proces snadný a efektivní.
-- **Nahrávání CV**: Zjistěte, zda je systém snadno použitelný a správně zpracovává informace z CV.
-- **Matching v dashboardu**: Overte, zda je přehledně a relevantně.
-- **Rezervace přednášek**: Zkontrolujte, zda je proces rezervace snadný a efektivní.
-- **On-site párování přes kód**: Zjistěte, zda je příjemné a efektivní.
+### 🏢 Pro Vystavovatele (Firmy)
+*   **Bohaté profily:** Správa popisu firmy, webových stránek a kontaktů.
+*   **Virtuální přítomnost:** Integrace YouTube videí, odkazů na online meetingy (Zoom/Jitsi) a PDF brožur.
+*   **Správa pozic:** Vystavování pracovních nabídek specificky pro každou akci.
+*   **On-site párování:** Unikátní pairing kódy pro rychlé propojení s kandidáty přímo u stánku.
 
-## Roadmapa a vize
-- **Integrace s AI (LLM)**: Hloubková analýza CV a automatizované matching pro zlepšení přesnosti a efektivity.
-- **Interaktivní 2D/3D mapa stánků s navigací**: Ujistěte se, že je navigace prostorově snadná a uživatelsky přívětivá.
-- **Mobilní aplikace pro skenování QR kódů**: Zjistěte, zda je mobilní přístup snadný a uživatelsky přívětivý.
-- **Automatizovaný mailing a notifikace**: Zjistěte, zda jsou zprávy relevantní a časově vhodné.
+### 🎓 Pro Uchazeče (Kandidáty)
+*   **Chytrý Matching:** Algoritmus porovnávající dovednosti a zkušenosti z CV s požadavky firem.
+*   **Správa CV:** Nahrávání a správa životopisů.
+*   **Program akce:** Rezervace míst na přednáškách a workshopech.
+*   **Virtuální účast:** Sledování streamovaných přednášek přímo v platformě.
 
-## Instalace
-K instalaci projektu naleznete kompletní návod včetně importu schema.sql a nastavení connect.php. 
+### 🛠 Pro Administrátory
+*   **Komplexní Dashboard:** Real-time statistiky o počtu registrací, schůzek a uzavřených kontraktů.
+*   **Správa obsahu:** Plná kontrola nad akcemi, stánky, přednáškami a profily firem.
+*   **Přidělování stánků:** Mapování firem na konkrétní fyzická místa v hale.
 
-## Výzva
-Hledáme testery a spolupracovníky, kteří by mohli pomoci v testování a rozvoji projektu. Pokud byste chtěli spolupracovat, kontaktujte nás na [e-mail adresa] nebo [číslo telefonu].
+## 💻 Technické řešení
+*   **Backend:** PHP 8.x (Vanilla) s PDO pro bezpečnou práci s databází.
+*   **Databáze:** MySQL / MariaDB (Prepared statements, cizí klíče).
+*   **Frontend:** Bootstrap 5, Bi-Icons, čisté a responzivní UI.
+*   **Bezpečnost:** CSRF ochrana, hašování hesel (bcrypt), autorizace na úrovni rolí.
+
+## 🛠 Instalace a nastavení
+
+1.  **Databáze:** Importujte soubor `schema.sql` do vaší MySQL databáze.
+2.  **Konfigurace:** Zkopírujte `inc/connect.template.php` do `inc/connect.php` a vyplňte své přístupové údaje k databázi.
+3.  **Bootstrap:** Základní nastavení aplikace se nachází v `inc/bootstrap.php`.
+4.  **Data:** Pro rychlé otestování můžete spustit `seed.php` pro naplnění databáze ukázkovými daty.
+
+## 📈 Roadmapa
+*   [ ] Integrace AI (LLM) pro hloubkovou analýzu CV a automatizovaný matching.
+*   [ ] Interaktivní 2D mapa stánků s navigací v reálném čase.
+*   [ ] Mobilní aplikace pro rychlé skenování QR kódů kandidátů.
+*   [ ] Automatizovaný mailing a notifikační systém pro schůzky.
 
 ---
-
-## Kontakt
-[Your Name]  
-Project Manager  
-CareerExpo  
-E-mail: [e-mail adresa]  
-Tel.: [číslo telefonu]  
-LinkedIn: [profil LinkedIn]
-
+© 2026 CareerExpo Project Team

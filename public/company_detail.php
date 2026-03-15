@@ -49,7 +49,7 @@ include_once __DIR__ . '/../templates/header.php';
                 <div class="mb-4">
                     <h5 class="fw-bold mb-3"><i class="bi bi-play-btn me-2"></i>Představení firmy</h5>
                     <div class="ratio ratio-16x9 shadow-sm rounded overflow-hidden">
-                        <iframe src="<?= e($company['video_url']) ?>" title="Company Video" allowfullscreen></iframe>
+                        <iframe src="<?= e(getYouTubeEmbedUrl($company['video_url'])) ?>" title="Company Video" allowfullscreen></iframe>
                     </div>
                 </div>
             <?php endif; ?>

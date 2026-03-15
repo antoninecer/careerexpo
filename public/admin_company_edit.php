@@ -26,6 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contact_person = $_POST['contact_person'];
     $email = $_POST['email'];
     $type = $_POST['type'];
+    $description = $_POST['description'];
+    $website = $_POST['website'];
+    $video_url = $_POST['video_url'];
+    $meeting_url = $_POST['meeting_url'];
+    $brochure_url = $_POST['brochure_url'];
     $stand_id = !empty($_POST['stand_id']) ? (int)$_POST['stand_id'] : null;
     $new_password = $_POST['new_password'];
 
@@ -33,8 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->beginTransaction();
 
         // 1. Aktualizace profilu firmy
-        $stmt = $pdo->prepare("UPDATE company_profiles SET name = ?, contact_person = ?, email = ?, type = ?, stand_id = ? WHERE id = ?");
-        $stmt->execute([$name, $contact_person, $email, $type, $stand_id, $companyId]);
+        $stmt = $pdo->prepare("UPDATE company_profiles SET 
+            name = ?, contact_person = ?, email = ?, type = ?, 
+            description = ?, website = ?, video_url = ?, 
+            meeting_url = ?, brochure_url = ?, stand_id = ? 
+            WHERE id = ?");
+        $stmt->execute([
+            $name, $contact_person, $email, $type, 
+            $description, $website, $video_url, 
+            $meeting_url, $brochure_url, $stand_id, $companyId
+        ]);
 
         // 2. Aktualizace hesla, pokud bylo zadáno
         if (!empty($new_password)) {
@@ -69,7 +82,7 @@ include_once __DIR__ . '/../templates/header.php';
 ?>
 
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-10">
         <div class="card shadow-sm border-0 p-4">
             <h2 class="mb-4 fw-bold text-primary">Upravit vystavovatele (Admin)</h2>
             
@@ -80,32 +93,13 @@ include_once __DIR__ . '/../templates/header.php';
             <form method="post">
                 <?= getCsrfInput() ?>
                 
-                <div class="mb-3">
-                    <label class="form-label fw-bold small">Název firmy</label>
-                    <input type="text" name="name" class="form-control rounded-pill shadow-sm" value="<?= e($company['name']) ?>" required>
-                </div>
-
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold small">Kontaktní osoba</label>
-                        <input type="text" name="contact_person" class="form-control rounded-pill shadow-sm" value="<?= e($company['contact_person']) ?>">
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label fw-bold small">Název firmy</label>
+                        <input type="text" name="name" class="form-control rounded-pill shadow-sm" value="<?= e($company['name']) ?>" required>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold small">Kontaktní e-mail (veřejný)</label>
-                        <input type="email" name="email" class="form-control rounded-pill shadow-sm" value="<?= e($company['email']) ?>">
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold small">Typ účasti</label>
-                        <select name="type" class="form-select rounded-pill shadow-sm">
-                            <option value="physical" <?= $company['type'] === 'physical' ? 'selected' : '' ?>>Fyzická (Stánek)</option>
-                            <option value="virtual" <?= $company['type'] === 'virtual' ? 'selected' : '' ?>>Virtuální (Online)</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold small">Přiřadit stánek</label>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold small">Přiřadit stánek (Aktuální akce)</label>
                         <select name="stand_id" class="form-select rounded-pill shadow-sm">
                             <option value="">-- Bez stánku --</option>
                             <?php foreach ($stands as $s): ?>
@@ -117,8 +111,54 @@ include_once __DIR__ . '/../templates/header.php';
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold small">Kontaktní osoba</label>
+                        <input type="text" name="contact_person" class="form-control rounded-pill shadow-sm" value="<?= e($company['contact_person']) ?>">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold small">Veřejný e-mail</label>
+                        <input type="email" name="email" class="form-control rounded-pill shadow-sm" value="<?= e($company['email']) ?>">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold small">Typ účasti</label>
+                        <select name="type" class="form-select rounded-pill shadow-sm">
+                            <option value="physical" <?= $company['type'] === 'physical' ? 'selected' : '' ?>>Fyzická (Stánek)</option>
+                            <option value="virtual" <?= $company['type'] === 'virtual' ? 'selected' : '' ?>>Virtuální (Online)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold small">Popis firmy</label>
+                    <textarea name="description" class="form-control shadow-sm" rows="5" style="border-radius: 15px;"><?= e($company['description']) ?></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold small">Webová stránka</label>
+                    <input type="url" name="website" class="form-control rounded-pill shadow-sm" value="<?= e($company['website']) ?>">
+                </div>
+
+                <hr class="my-4">
+                <h5 class="fw-bold text-info mb-3"><i class="bi bi-broadcast me-2"></i>Virtuální přítomnost</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold small">YouTube Video URL (embed link)</label>
+                        <input type="url" name="video_url" class="form-control rounded-pill shadow-sm" placeholder="https://www.youtube.com/embed/..." value="<?= e($company['video_url']) ?>">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold small">Odkaz na online meeting (Zoom/Jitsi/...)</label>
+                        <input type="url" name="meeting_url" class="form-control rounded-pill shadow-sm" placeholder="https://meet.jit.si/..." value="<?= e($company['meeting_url']) ?>">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold small">Odkaz na PDF brožuru</label>
+                    <input type="url" name="brochure_url" class="form-control rounded-pill shadow-sm" placeholder="https://firma.cz/letak.pdf" value="<?= e($company['brochure_url']) ?>">
+                </div>
+
                 <hr class="my-4">
                 <h5 class="fw-bold text-danger mb-3"><i class="bi bi-shield-lock me-2"></i>Změna hesla</h5>
+
                 <div class="row align-items-end">
                     <div class="col-md-8 mb-3">
                         <label class="form-label small text-muted">Nové přihlašovací heslo (ponechte prázdné pro beze změny)</label>
