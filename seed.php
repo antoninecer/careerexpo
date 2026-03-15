@@ -65,7 +65,7 @@ function randomPairingCode(PDO $pdo, string $table): string {
 }
 
 function pickEventType(int $index): string {
-    return $index % 3 === 0 ? 'virtual' : ($index % 2 === 0 ? 'hybrid' : 'physical');
+    return $index % 3 === 0 ? 'virtual' : 'physical';
 }
 
 function ensureUser(PDO $pdo, string $email, string $role, string $password = 'Test123!'): int {
